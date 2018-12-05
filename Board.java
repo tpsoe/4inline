@@ -3,48 +3,67 @@
  * an 8x8 2D array. The number of empty spaces on the board is also kept track
  * of.
  */
+/**
+ * @author Oakar Kyaw
+ *
+ */
 public class Board {
-	private int[][] board;
-	private int emptySpaces;
+	int[][] board;
+	int availableSpot;
 
 	/* Board constructor */
-	public Board(int[][] b, int s) {
-		board = b;
-		emptySpaces = s;
+	public Board(int size) {
+		board = new int[size][size];
+		availableSpot = size*size;
 	}
 
-	/**
-	 * Returns the current board.
-	 */
 	public int[][] getBoard() {
 		return board;
 	}
 
-	/**
-	 * Returns the current number of empty spaces.
-	 */
-	public int getEmptySpaces() {
-		return emptySpaces;
+	public boolean isFull() {
+		return (availableSpot==0)? true: false;
 	}
 
-	/**
-	 * Returns the length of the board.
-	 */
-	public int getBoardLength() {
-		return board.length;
-	}
-
-	/**
-	 * Checks the board for any four O's in a row or any four X's in a row by
-	 * traversing the entire array. Returns 1 if the player wins, -1 if the AI wins,
-	 * and 0 if there isn't a winner yet.
-	 */
-	public int checkWin() {
+//	public int isDone() {
+//		for (int i = 0; i < board.length; i++) {
+//			for (int j = 0; j < board.length; j++) {
+//				if (board[i][j] != 0 ) {
+//					if (checkFour(i, j, board[i][j])) {
+//						return board[i][j];
+//					}
+//				}
+//			}
+//		}
+//		return 0;
+//	}
+	public int isDone() {
 		for (int i = 0; i < board.length; i++) {
 			for (int j = 0; j < board.length; j++) {
-				if (board[i][j] == -1 || board[i][j] == 1) {
-					if (checkFour(i, j, board[i][j])) {
-						return board[i][j];
+				if (board[i][j] != 0 ) {
+					int count = 0;
+					if(i+4 < board.length) {
+						for(int x=i; x<i+4; x++) {
+							if(board[x][j] != board[i][j]) {
+								continue;
+							}
+							count++;
+						}
+						if(count == 4) {
+							return board[i][j];
+						}
+					}
+					count = 0;
+					if(j+4 < board.length) {
+						for(int x=j; x<j+4; x++) {
+							if(board[i][x] != board[i][j]) {
+								continue;
+							}
+							count++;
+						}
+						if(count == 4) {
+							return board[i][j];
+						}
 					}
 				}
 			}
@@ -52,11 +71,6 @@ public class Board {
 		return 0;
 	}
 
-	/**
-	 * Helper method for the checkWin method. Checks each row and column and returns
-	 * true if four O's in a row or four X's in a row are found. Returns false
-	 * otherwise.
-	 */
 	private boolean checkFour(int row, int col, int player) {
 		if (row + 4 <= board.length && checkCol(row, col, player)) {
 			return true;
@@ -67,10 +81,7 @@ public class Board {
 		return false;
 	}
 
-	/**
-	 * Helper method for the checkFour method. Checks each row and returns true if
-	 * four O's in a row or four X's in a row are found. Returns false otherwise.
-	 */
+
 	private boolean checkRow(int row, int col, int player) {
 		for (int i = col; i < col + 4; i++) {
 			if (board[row][i] != player) {
@@ -80,10 +91,7 @@ public class Board {
 		return true;
 	}
 
-	/**
-	 * Helper method for the checkFour method. Checks each column and returns true
-	 * if four O's in a row or four X's in a row are found. Returns false otherwise.
-	 */
+
 	private boolean checkCol(int row, int col, int player) {
 		for (int i = row; i < row + 4; i++) {
 			if (board[i][col] != player) {
@@ -92,71 +100,48 @@ public class Board {
 		}
 		return true;
 	}
-
-	/**
-	 * Converts the given String to a row index and a column index for the board (2D
-	 * array). Returns true if the move is valid and false otherwise.
-	 */
-	public boolean move(String input, boolean playerTurn) {
-		int row = input.charAt(0) - 97;
-		if (row < 0) {
-			row = input.charAt(0) - 65;
-		}
-		int col = input.charAt(1) - 49;
-		return move(row, col, playerTurn);
-	}
-
-	/**
-	 * Helper method for the move method. Returns true if the move is valid and if
-	 * the board is successfully updated. Returns false otherwise.
-	 */
-	public boolean move(int row, int col, boolean playerTurn) {
+	public boolean isValid(int row, int col) {
 		if (row < 0 || col < 0 || row >= board.length || col >= board.length || board[row][col] != 0) {
 			return false;
-		}
-		emptySpaces--;
-		if (playerTurn) {
-			board[row][col] = -1;
-		} else {
-			board[row][col] = 1;
 		}
 		return true;
 	}
 
-	/**
-	 * Resets the space at the given row and column. Returns true if it is
-	 * successful and false otherwise.
-	 */
-	public boolean undoMove(int row, int col) {
-		if (board[row][col] == 0) {
-			return false;
-		} else {
-			emptySpaces++;
-			board[row][col] = 0;
-			return true;
-		}
+	public void set(int row, int col, int value) {
+		board[row][col] = value;
+		availableSpot--;
 	}
 
-	/**
-	 * Returns a String of the current board state. "-" = empty space "O" = player
-	 * move "X" = AI move
-	 */
-	public String toString() {
-		String str = "  1 2 3 4 5 6 7 8\n";
-		char ch = 'A';
-		for (int i = 0; i < board.length; i++) {
-			str += ((ch++) + " ");
-			for (int j = 0; j < board.length; j++) {
-				if (board[i][j] == 0) {
-					str += "- ";
-				} else if (board[i][j] == 1) {
-					str += "X ";
-				} else {
-					str += "O ";
+
+	public void undoMove(int row, int col) {
+		board[row][col] = 0;
+		availableSpot++;
+	}
+
+
+	public void printBoard() {
+		for (int i = 0; i < board.length+1; i++) {
+			for (int j = 0; j < board.length+1; j++) {
+				if(i==0) {
+					System.out.print(j + " ");
+				}else {
+					if (j==0) {
+						System.out.print(i + " ");
+					}else {
+						if (board[i-1][j-1] == 0) {
+							System.out.print("- ");
+						} else if (board[i-1][j-1] == 1) {
+							System.out.print("X ");
+						} else {
+							System.out.print("O ");
+						}
+					}
 				}
 			}
-			str += "\n";
+			System.out.println();
 		}
-		return str;
+
 	}
+
+
 }
