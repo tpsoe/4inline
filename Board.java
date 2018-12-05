@@ -1,12 +1,3 @@
-/**
- * This class represents one board state of the Four In A Line game. A board is
- * an 8x8 2D array. The number of empty spaces on the board is also kept track
- * of.
- */
-/**
- * @author Oakar Kyaw
- *
- */
 public class Board {
 	int[][] board;
 	int availableSpot;
@@ -16,7 +7,9 @@ public class Board {
 		board = new int[size][size];
 		availableSpot = size*size;
 	}
-
+	public void setBoard (int[][] board) {
+		this.board = board.clone();
+	}
 	public int[][] getBoard() {
 		return board;
 	}
@@ -76,7 +69,7 @@ public class Board {
 	}
 
 
-	public void undoMove(int row, int col) {
+	public void unSet(int row, int col) {
 		board[row][col] = 0;
 		availableSpot++;
 	}
