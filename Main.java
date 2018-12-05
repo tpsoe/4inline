@@ -41,29 +41,28 @@ public class Main {
 					col = input.charAt(1) - 49;
 				}
 				board.set(row, col, 1);
+				playerMove = false;
 			}else {
 				System.out.println("Ai Thinking!");
 				int[] aImove = minMax(board);
 				board.set(aImove[0], aImove[1], -1);
 				System.out.println("AI move: " + (aImove[0]+1) + " " + (aImove[1]+1));
-			}//end if else
-			if(playerMove) {
-				playerMove = false;
-			}else {
 				playerMove = true;
-			}
+			}//end if else
+			
+		
 			board.printBoard();
 			if(board.isDone() != 0) {
 				done = true;
 			}
 		}//end while
 		int winner = board.isDone();
-		if(winner == 0) {
-			System.out.println("It's a tie!");
-		}else if(winner == 1) {
+		if(winner == 1) {
 			System.out.println("Player Wins!");
 		}else if(winner == -1) {
 			System.out.println("Ai Wins!");
+		}else {
+			System.out.println("It's a Tie!");
 		}
 	}//end main
 	
@@ -73,7 +72,12 @@ public class Main {
         int row = 0;
         int col = 0;
 
-        int best = Integer.MIN_VALUE;
+        int best;
+        if(b.isEmpty()) {
+        	best = Integer.MAX_VALUE;
+        }else {
+        	best = calcScore(b);
+        }
 
         for( int i = 0; i < BOARD_SIZE; i++ ){
             for( int j = 0; j < BOARD_SIZE; j++ ){
@@ -151,7 +155,6 @@ public class Main {
 
     private static int calcScore( Board b ){
         int score = 0;
-
         for( int i = 0; i < BOARD_SIZE; i++ ){
             for( int j = 0; j < BOARD_SIZE; j++ ){
                 score += potential( i, j, b );

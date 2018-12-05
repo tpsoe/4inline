@@ -20,23 +20,15 @@ public class Board {
 	public int[][] getBoard() {
 		return board;
 	}
+	
+	public boolean isEmpty() {
+		return (availableSpot==board.length*board.length)?true: false;
+	}
 
 	public boolean isFull() {
 		return (availableSpot==0)? true: false;
 	}
 
-//	public int isDone() {
-//		for (int i = 0; i < board.length; i++) {
-//			for (int j = 0; j < board.length; j++) {
-//				if (board[i][j] != 0 ) {
-//					if (checkFour(i, j, board[i][j])) {
-//						return board[i][j];
-//					}
-//				}
-//			}
-//		}
-//		return 0;
-//	}
 	public int isDone() {
 		for (int i = 0; i < board.length; i++) {
 			for (int j = 0; j < board.length; j++) {
@@ -71,35 +63,6 @@ public class Board {
 		return 0;
 	}
 
-	private boolean checkFour(int row, int col, int player) {
-		if (row + 4 <= board.length && checkCol(row, col, player)) {
-			return true;
-		}
-		if (col + 4 <= board.length && checkRow(row, col, player)) {
-			return true;
-		}
-		return false;
-	}
-
-
-	private boolean checkRow(int row, int col, int player) {
-		for (int i = col; i < col + 4; i++) {
-			if (board[row][i] != player) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-
-	private boolean checkCol(int row, int col, int player) {
-		for (int i = row; i < row + 4; i++) {
-			if (board[i][col] != player) {
-				return false;
-			}
-		}
-		return true;
-	}
 	public boolean isValid(int row, int col) {
 		if (row < 0 || col < 0 || row >= board.length || col >= board.length || board[row][col] != 0) {
 			return false;
