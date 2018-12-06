@@ -187,10 +187,10 @@ public class Main {
 				score += 25;
 			}
 		}else if (b.board[row][col] == -1) {
-			if (b.board[second][col] == -1 || b.board[third][col] == 0) {
-				if (b.board[third][col] == -1 ) {
+			if (b.board[second][col] == -1 ) {
+				if (b.board[third][col] == -1 || b.board[third][col] == 0) {
 					if(b.board[third+1][col] == -1) {
-						score-=20000;
+						score -= 20000;
 					}else {
 						score -= 100;
 					}
@@ -207,8 +207,7 @@ public class Main {
 
 		if (b.board[row][col] == 1){
 			if (b.board[row][second] == 1 && b.board[row][second] == 0) {
-				if (b.board[row][third] == 1 && b.board[row][second] == 0) {
-
+				if (b.board[row][third] == 1 && b.board[row][third] == 0) {
 					if(b.board[row][third+1] == 1) {
 						score += 200000;
 					}else {
@@ -222,22 +221,18 @@ public class Main {
 			}
 		}else if (b.board[row][col] == -1) {
 			if (b.board[row][second] == -1 && b.board[row][second] == 0) {
-				if (b.board[row][third] == -1 && b.board[row][second] == 0) {
-
+				if (b.board[row][third] == -1 && b.board[row][third] == 0) {
 					if(b.board[row][third+1] == 1) {
 						score -= 200000;
-					}
-					else {
+					}else {
 						score -= 100;
 					} 
-				}
-				else {
+				}else {
 					score -= 75;
 				}
 			}
 		}		
 		return score;
 	}
-
 
 }
