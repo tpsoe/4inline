@@ -73,23 +73,24 @@ public class Main {
         long startTime = System.currentTimeMillis();
         int[] aImove = new int[2];
 
-        int best;
+        int alpha,beta = 0;
         if (b.isEmpty()) {
-            best = Integer.MAX_VALUE;
+        	alpha = Integer.MAX_VALUE;
+        	beta = Integer.MIN_VALUE;
         } else {
-            best = calcScore(b);
+        	alpha = calcScore(b);
         }
 
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
                 if (b.board[i][j] == 0) {
                     b.set(i, j, 1);
-                    score = minVal(b, DEPTH - 1, startTime);
+                    score = minVal(b, DEPTH - 1, startTime,alpha,beta);
                     b.unSet(i, j);
-                    if (score > best) {
+                    if (score > alpha) {
                         aImove[0] = i;
                         aImove[1] = j;
-                        best = score;
+                        alpha = score;
                     }
                 }
             }
@@ -114,7 +115,7 @@ public class Main {
                 if (b.getBoard()[i][j] == 0) {
 					
                     b.set(i, j, 1);
-                    best = Integer.min(best, maxVal(b, d - 1, startTime));
+                    best = Integer.min(best, maxVal(b, d - 1, startTime,alpha,beta));
                     b.unSet(i, j);
                 }
             }
@@ -136,7 +137,7 @@ public class Main {
             for (int j = 0; j < BOARD_SIZE; j++) {
                 if (b.getBoard()[i][j] == 0) {
                     b.set(i, j, -1);
-                    best = Integer.max(best, minVal(b, d - 1, startTime));
+                    best = Integer.max(best, minVal(b, d - 1, startTime,alpha,beta));
                     b.unSet(i, j);
                 }
             }
