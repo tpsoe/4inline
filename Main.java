@@ -159,79 +159,99 @@ public class Main {
 	public static int scoreEvaluation(int row, int col, Board b) {
 		int score = 0;
 		if ((row + 3) < BOARD_SIZE) {
-			score += evaluateRow(row, col, row + 1, row + 2, b);
+			score += evaluateRow(row, col, b);
 		}
 		if ((col + 3) < BOARD_SIZE) {
-			score += evaluateCol(col, row, col + 1, col + 2, b);
+			score += evaluateCol(col, row, b);
 		}
 
 		return score;
 
 	}
 
-	private static int evaluateRow(int row, int col, int second, int third, Board b) {
+	private static int evaluateRow(int row, int col,Board b) {
 		int score = 0;
 
 		if (b.board[row][col] == 1){
-			if (b.board[second][col] == 1) {
-				if (b.board[third][col] == 1 || b.board[third][col] == 0) {
-					if(b.board[third+1][col] == 1) {
-						score += 10000;
-					}else {
-						score += 100;
-					}
-				}else {
-					score += 50;
-				}
-			}else {
-				score += 25;
-			}
-		}else if (b.board[row][col] == -1) {
-			if (b.board[second][col] == -1 ) {
-				if (b.board[third][col] == -1 || b.board[third][col] == 0) {
-					if(b.board[third+1][col] == -1) {
-						score -= 20000;
-					}else {
-						score -= 100;
-					}
-				}else {
-					score -= 75;
-				}
-			}
-		}
-		return score;
-	}
-
-	private static int evaluateCol(int row, int col, int second, int third, Board b) {
-		int score = 0;
-
-		if (b.board[row][col] == 1){
-			if (b.board[row][second] == 1 && b.board[row][second] == 0) {
-				if (b.board[row][third] == 1 && b.board[row][third] == 0) {
-					if(b.board[row][third+1] == 1) {
+			if (b.board[row+1][col] == 1) {
+				if (b.board[row+2][col] == 1) {
+					if(b.board[row+3][col] == 0 ) {
 						score += 200000;
 					}else {
 						score += 100;
-					} 
-				}else {
+					}
+				}else if(b.board[row+2][col] == 0) {
+					if(b.board[row+3][col] == 1 ) {
+						score += 200000;
+					}
+				}else{
 					score += 50;
 				}
 			}else {
 				score += 25;
 			}
-		}else if (b.board[row][col] == -1) {
-			if (b.board[row][second] == -1 && b.board[row][second] == 0) {
-				if (b.board[row][third] == -1 && b.board[row][third] == 0) {
-					if(b.board[row][third+1] == 1) {
+		}else if (b.board[row][col] == -1){
+			if (b.board[row+1][col] == -1) {
+				if (b.board[row+2][col] == -1) {
+					if(b.board[row+3][col] == 0 ) {
 						score -= 200000;
 					}else {
 						score -= 100;
-					} 
-				}else {
-					score -= 75;
+					}
+				}else if(b.board[row+2][col] == 0) {
+					if(b.board[row+3][col] == -1 ) {
+						score -= 200000;
+					}
+				}else{
+					score -= 50;
 				}
+			}else {
+				score -= 25;
 			}
-		}		
+		}
+		return score;
+	}
+
+	private static int evaluateCol(int row,int col, Board b) {
+		int score = 0;
+
+		if (b.board[row][col] == 1){
+			if (b.board[row][col+1] == 1) {
+				if (b.board[row][col+2] == 1) {
+					if(b.board[row][col+3] == 0 ) {
+						score += 200000;
+					}else {
+						score += 100;
+					}
+				}else if(b.board[row][col+2] == 0) {
+					if(b.board[row][col+3] == 1 ) {
+						score += 200000;
+					}
+				}else{
+					score += 50;
+				}
+			}else {
+				score += 25;
+			}
+		}else if (b.board[row][col] == -1){
+			if (b.board[row][col+1] == -1) {
+				if (b.board[row][col+2] == -1) {
+					if(b.board[row][col+3] == 0 ) {
+						score -= 200000;
+					}else {
+						score -= 100;
+					}
+				}else if(b.board[row][col+2] == 0) {
+					if(b.board[row][col+3] == -1 ) {
+						score -= 200000;
+					}
+				}else{
+					score -= 50;
+				}
+			}else {
+				score -= 25;
+			}
+		}	
 		return score;
 	}
 
