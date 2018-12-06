@@ -99,7 +99,7 @@ public class Main {
 
     }// end min max
 
-    private static int minVal(Board b, int d, long startTime) {
+    private static int minVal(Board b, int d, long startTime,int alpha,int beta) {
         if (System.currentTimeMillis() - startTime > TIME_LIMIT) {
             return calcScore(b);
         } else if (b.isDone() == -1) {
@@ -108,10 +108,11 @@ public class Main {
             return Integer.MAX_VALUE / 2;
         }
 
-        int best = Integer.MAX_VALUE;
+        int best = beta;
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
                 if (b.getBoard()[i][j] == 0) {
+					
                     b.set(i, j, 1);
                     best = Integer.min(best, maxVal(b, d - 1, startTime));
                     b.unSet(i, j);
@@ -121,7 +122,7 @@ public class Main {
         return best;
     }
 
-    private static int maxVal(Board b, int d, long startTime) {
+    private static int maxVal(Board b, int d, long startTime,int alpha, int beta) {
         if (System.currentTimeMillis() - startTime > TIME_LIMIT) {
             return calcScore(b);
         } else if (b.isDone() == -1) {
@@ -130,7 +131,7 @@ public class Main {
             return Integer.MAX_VALUE / 2;
         }
 
-        int best = Integer.MIN_VALUE;
+        int best = alpha;
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
                 if (b.getBoard()[i][j] == 0) {
@@ -174,7 +175,7 @@ public class Main {
 				if (b.board[third][col] == 1) {
 					if((third+1)<b.board.length) {
 						if(b.board[third+1][col] == 1) {
-							score += 200;
+							score += 10000;
 						}
 					}else {
 						score += 100;
