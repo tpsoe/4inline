@@ -2,7 +2,7 @@ import java.util.Scanner;
 
 public class Main {
 	static int BOARD_SIZE = 8;
-	static int TIME_LIMIT = 10000;
+	static int TIME_LIMIT = 250000;
 	static int DEPTH = 30;
 
 	public static void main(String[] args) {
